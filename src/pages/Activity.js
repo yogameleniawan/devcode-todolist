@@ -12,27 +12,12 @@ const Activity = () => {
     const handleShow = () => setShow(true);
 
     const colourOptions = [
-        { value: 'veryhigh', label: 'Very High', style: { color: 'red' } },
-        { value: 'high', label: 'High' },
-        { value: 'medium', label: 'Medium' },
-        { value: 'low', label: 'Low' },
-        { value: 'verylow', label: 'Very Low' },
+        { value: 'veryhigh', label: 'Very High', color: '#ED4C5C' },
+        { value: 'high', label: 'High', color: '#F8A541' },
+        { value: 'medium', label: 'Medium', color: '#00A790' },
+        { value: 'low', label: 'Low', color: '#428BC1' },
+        { value: 'verylow', label: 'Very Low', color: '#8942C1' },
     ];
-
-    const dot = (color = 'transparent') => ({
-        alignItems: 'center',
-        display: 'flex',
-      
-        ':before': {
-          backgroundColor: 'red',
-          borderRadius: 20,
-          content: '" "',
-          display: 'block',
-          marginRight: 10,
-          height: 15,
-          width: 15,
-        },
-      });
 
     const customStyles = {
         menu: (provided, state) => ({
@@ -41,11 +26,36 @@ const Activity = () => {
             borderBottom: '1px dotted pink',
             color: 'black',
         }),
-        option: (provided, state) => {
-            return { ...provided, ...dot() };
+        option: (styles, { data }) => {
+            return { ...styles, 
+                alignItems: 'center',
+                display: 'flex',
+            
+                ':before': {
+                    backgroundColor: data.color,
+                    borderRadius: 20,
+                    content: '" "',
+                    display: 'block',
+                    marginRight: 10,
+                    height: 15,
+                    width: 15,
+                  },
+            };
         },
-        singleValue: (provided, state) => {
-          return { ...provided, ...dot() };
+        singleValue: (styles, { data}) => {
+          return { ...styles, 
+            alignItems: 'center',
+                display: 'flex',
+            ':before': {
+                backgroundColor: data.color,
+                borderRadius: 20,
+                content: '" "',
+                display: 'block',
+                marginRight: 10,
+                height: 15,
+                width: 15,
+            }, 
+            };
         }
       }
     

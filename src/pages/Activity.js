@@ -1,7 +1,58 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import image from './../assets/img/todo-empty-state.png';
-
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import Select from 'react-select';
 const Activity = () => {
+    const [open, setOpen] = useState(false);
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const colourOptions = [
+        { value: 'veryhigh', label: 'Very High', style: { color: 'red' } },
+        { value: 'high', label: 'High' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'low', label: 'Low' },
+        { value: 'verylow', label: 'Very Low' },
+    ];
+
+    const dot = (color = 'transparent') => ({
+        alignItems: 'center',
+        display: 'flex',
+      
+        ':before': {
+          backgroundColor: 'red',
+          borderRadius: 20,
+          content: '" "',
+          display: 'block',
+          marginRight: 10,
+          height: 15,
+          width: 15,
+        },
+      });
+
+    const customStyles = {
+        menu: (provided, state) => ({
+            ...provided,
+            width: 200,
+            borderBottom: '1px dotted pink',
+            color: 'black',
+        }),
+        option: (provided, state) => {
+            return { ...provided, ...dot() };
+        },
+        singleValue: (provided, state) => {
+          return { ...provided, ...dot() };
+        }
+      }
+    
+    const handleOpen = () => {
+        setOpen(!open);
+    }
+
     return (
         <div className="container flex flex-col">
             <div className="flex justify-between">
@@ -11,8 +62,8 @@ const Activity = () => {
                     <button data-cy="todo-title-edit-button" className="text-xl text-gray-400"><i className='bx bx-pencil'></i></button>
                 </div>
                 <div className="flex">
-                    <button id="dropdownDefault" data-dropdown-toggle="dropdown" data-cy="todo-sort-button" className="text-xl text-gray-400 my-8 px-5 mx-2 rounded-full border-solid border-gray-300 border"><i className='bx bx-sort-alt-2 text-2xl'></i></button>
-                    <div id="dropdown" className="absolute top-52 z-10 w-52 bg-white rounded-lg divide-y divide-gray-100 shadow dark:bg-gray-700">
+                    <button onClick={handleOpen} data-cy="todo-sort-button" className="text-xl text-gray-400 my-8 px-3 mx-2 rounded-full border-solid border-gray-300 border"><i className='bx bx-sort-alt-2 text-2xl'></i></button>
+                    <div id="dropdown" className={open ? 'absolute top-52 z-10 w-52 bg-white rounded-lg divide-y divide-gray-100 shadow dark:bg-gray-700' : 'hidden'}>
                         <ul data-cy="sort-parent" className="rounded-lg border-2 border-gray-200 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
                             <li data-cy="sort-latest" className="hover:cursor-pointer hover:bg-gray-200 hover:rounded-md">
                                 <div className="flex p-3 items-center justify-between border-b-2 border-b-gray-200">
@@ -57,7 +108,7 @@ const Activity = () => {
                             </li>
                         </ul>
                     </div>
-                    <button data-cy="todo-add-button" className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl"> Tambah</button>
+                    <button onClick={handleShow} data-cy="todo-add-button" className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl"> Tambah</button>
                 </div>
             </div>
             {/* <div data-cy="todo-empty-state" className="flex justify-center">
@@ -76,7 +127,35 @@ const Activity = () => {
                     </div>
                 </div>
             </div>
-            
+            <Modal data-cy="modal-add" show={show} onHide={handleClose} size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title data-cy="modal-add-title" className="text-lg font-bold">Tambah Item List</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <Form.Label data-cy="modal-add-name-title">Nama List Item</Form.Label>
+                            <Form.Control data-cy="modal-add-name-input" type="text" placeholder="Nama List Item" />
+                        </Form.Group>
+                        <Form.Group className="mb-3 w-44" controlId="exampleForm.ControlInput1">
+                            <Form.Label data-cy="modal-add-priority-title">Priority</Form.Label>
+                            <Select
+                                data-cy="modal-add-priority-dropdown"
+                                className="basic-single"
+                                classNamePrefix="select"
+                                defaultValue={colourOptions[0]}
+                                isSearchable={true}
+                                name="color"
+                                options={colourOptions}
+                                styles={customStyles}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                <button onClick={handleClose} data-cy="modal-add-save-button" className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"> Simpan</button>
+            </Modal.Footer>
+        </Modal>
         </div>
     )
 }

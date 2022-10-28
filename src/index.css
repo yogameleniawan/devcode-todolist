@@ -29,3 +29,7 @@ code {
 }
 
 @import url('bootstrap/dist/css/bootstrap.min.css');
+
+.dropdown-toggle::after {
+  display: none !important; 
+}

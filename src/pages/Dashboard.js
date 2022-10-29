@@ -63,7 +63,7 @@ const Dashboard = () => {
                     }
                 </div>
             }
-            <DeleteModal show={showDelete} item={deleteItem} handleClose={handleCloseDelete}></DeleteModal>
+            <DeleteModal show={showDelete} item={deleteItem} type="activity" handleClose={handleCloseDelete}></DeleteModal>
         </div>
     )
 }

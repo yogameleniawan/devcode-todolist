@@ -16,7 +16,9 @@ const Activity = () => {
     const titleInput = useRef(null);
 
     const [show, setShow] = useState(false);
+    const [type, setType] = useState(false);
     const [title, setTitle] = useState(location.state.item.title);
+    const [deleteItem, setDeleteItem] = useState([]);
     const [onLoad, setOnLoad] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
@@ -24,10 +26,17 @@ const Activity = () => {
 
     const handleClose = () => setShow(false);
 
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setShow(true)
+        setType('add')
+    };
 
-    const handleShowDelete = () => setShowDelete(true);
+    const handleShowDelete = (item) => {
+        setShowDelete(true)
+        setDeleteItem(item)
+    };
 
+    const handleCloseDelete = () => setShowDelete(false);
     const handleEditTitle = () => {
         setEditTitle(!editTitle);
     }
@@ -82,7 +91,7 @@ const Activity = () => {
                                                 <button onClick={handleShow} data-cy="todo-item-edit-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-pencil'></i></button>
                                             </div>
                                             <div className="flex">
-                                                <button onClick={handleShowDelete} data-cy="todo-item-delete-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-trash'></i></button>
+                                                <button onClick={() => handleShowDelete(item)} data-cy="todo-item-delete-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-trash'></i></button>
                                             </div>
                                         </div>
                                     ))
@@ -90,8 +99,8 @@ const Activity = () => {
                         </div>
                 }
             </div>
-            <FormModal show={show} handleClose={handleClose} />
-            {/* <DeleteModal show={showDelete} handleClose={handleCloseDelete}></DeleteModal> */}
+            <FormModal show={show} type={type} activity_group_id={location.state.item.id} handleClose={handleClose} />
+            <DeleteModal show={showDelete} item={deleteItem} type="todo" handleClose={handleCloseDelete}></DeleteModal>
         </>
     )
 }

@@ -65,7 +65,7 @@ export const updateData = ({
     }
 }
 
-export const get = () => async (dispatch) => {
+export const getActivities = () => async (dispatch) => {
     try {
         const res = await Endpoint.getAllActivity();
         localStorage.setItem("activities", JSON.stringify(res.data.data));

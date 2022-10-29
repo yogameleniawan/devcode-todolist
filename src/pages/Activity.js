@@ -6,7 +6,7 @@ import DeleteModal from "../components/DeleteModal";
 import DropdownFilter from "../components/Dropdown";
 import FormModal from "../components/FormModal";
 import { updateData } from "../store/actions/activity";
-import { getTodo, updateDataTodo } from "../store/actions/todo";
+import { getDetail, updateDataTodo } from "../store/actions/todo";
 import image from './../assets/img/todo-empty-state.png';
 
 const Activity = () => {
@@ -59,7 +59,7 @@ const Activity = () => {
 
     useLayoutEffect(() => {
         setOnLoad(true)
-        dispatch(getTodo(location.state.item.id.toString())).then(() => {
+        dispatch(getDetail(location.state.item.id.toString())).then(() => {
             setOnLoad(false)
         });
     }, [])
@@ -70,15 +70,12 @@ const Activity = () => {
                 <div className="flex justify-between">
                     <div className="flex items-center">
                         <div data-cy="todo-back-button"><Link to="/" className="text-4xl pr-5 text-black"><i className='bx bxs-chevron-left'></i></Link></div>
-                        {
-                            editTitle ?
-                                <div data-cy="todo-title" >
-                                    <input ref={titleInput} onChange={onChangeTitle} onBlur={handleInputBlur} type="text" className="font-bold text-4xl pr-5 bg-transparent focus:outline-none focus:border-b-2 focus:border-b-gray-800" value={title} autoFocus />
-                                </div>
-                                : <div data-cy="todo-title">
-                                    <h1 onClick={handleEditTitle} type="text" className="font-bold text-4xl py-8 pr-5 focus:outline-none" >{title}</h1>
-                                </div>
-                        }
+                        <div data-cy="todo-title" >
+                            {
+                                editTitle ? <input ref={titleInput} onChange={onChangeTitle} onBlur={handleInputBlur} type="text" className="font-bold text-4xl pr-5 bg-transparent focus:outline-none focus:border-b-2 focus:border-b-gray-800" value={title} autoFocus /> : <h1 onClick={handleEditTitle} type="text" className="font-bold text-4xl py-8 pr-5 focus:outline-none" >{title}</h1>
+                            }
+                        </div>
+
                         <div data-cy="todo-title-edit-button">
                             <button className="text-xl text-gray-400" onClick={handleEditTitle}><i className='bx bx-pencil'></i></button>
                         </div>

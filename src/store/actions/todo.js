@@ -82,7 +82,7 @@ export const updateDataTodo = ({
     }
 }
 
-export const getTodo = (id) => async (dispatch) => {
+export const getDetail = (id) => async (dispatch) => {
     try {
         const res = await Endpoint.getAllTodo(id);
         dispatch({

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DeleteModal from '../components/DeleteModal';
 import image from './../assets/img/activity-empty-state.png';
-import { create, get } from './../store/actions/activity';
+import { create, getActivities } from './../store/actions/activity';
 
 const Dashboard = () => {
     const activity = useSelector(state => state.activity);
@@ -34,7 +34,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (activity.length === 0) {
-            dispatch(get());
+            dispatch(getActivities());
         }
     }, [activity, dispatch])
 

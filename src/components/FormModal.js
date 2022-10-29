@@ -91,36 +91,45 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit }) => {
     }
 
     return (
-        <Modal data-cy="modal-add" show={show} onHide={handleClose} size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title data-cy="modal-add-title" className="text-lg font-bold">{type === 'add' ? 'Tambah' : 'Edit'} Item List</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label data-cy="modal-add-name-title">Nama List Item</Form.Label>
-                        <Form.Control ref={titleInput} defaultValue={edit === undefined ? title : edit.title} onChange={(e) => handleChangeTitle(e)} data-cy="modal-add-name-input" type="text" placeholder="Nama List Item" />
-                    </Form.Group>
-                    <Form.Group className="mb-3 w-44" controlId="exampleForm.ControlInput1">
-                        <Form.Label data-cy="modal-add-priority-title">Priority</Form.Label>
-                        <Select
-                            ref={priority}
-                            data-cy="modal-add-priority-dropdown"
-                            className="basic-single"
-                            classNamePrefix="select"
-                            defaultValue={edit === undefined ? colourOptions[0] : colourOptions[colourOptions.findIndex(x => x.value === edit.priority)]}
-                            isSearchable={true}
-                            name="color"
-                            options={colourOptions}
-                            styles={customStyles}
-                        />
-                    </Form.Group>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <button onClick={() => handleSubmit()} data-cy="modal-add-save-button" className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === "" : edit.title === ""}> Simpan</button>}
-            </Modal.Footer>
-        </Modal>
+        <div data-cy="modal-add">
+            <Modal show={show} onHide={handleClose} size="lg">
+                <Modal.Header closeButton>
+                    <div data-cy="modal-add-title">
+                        <Modal.Title className="text-lg font-bold">{type === 'add' ? 'Tambah' : 'Edit'} Item List</Modal.Title>
+                    </div>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <div data-cy="modal-add-name-title">
+                                <Form.Label>Nama List Item</Form.Label>
+                            </div>
+                            <Form.Control ref={titleInput} defaultValue={edit === undefined ? title : edit.title} onChange={(e) => handleChangeTitle(e)} data-cy="modal-add-name-input" type="text" placeholder="Nama List Item" />
+                        </Form.Group>
+                        <Form.Group className="mb-3 w-44" controlId="exampleForm.ControlInput1">
+                            <div data-cy="modal-add-priority-title">
+                                <Form.Label >Priority</Form.Label>
+                            </div>
+                            <div data-cy="modal-add-priority-dropdown">
+                                <Select
+                                    ref={priority}
+                                    className="basic-single"
+                                    classNamePrefix="select"
+                                    defaultValue={edit === undefined ? colourOptions[0] : colourOptions[colourOptions.findIndex(x => x.value === edit.priority)]}
+                                    isSearchable={true}
+                                    name="color"
+                                    options={colourOptions}
+                                    styles={customStyles}
+                                />
+                            </div>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <div data-cy="modal-add-save-button"><button onClick={() => handleSubmit()} className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === "" : edit.title === ""}> Simpan</button></div>}
+                </Modal.Footer>
+            </Modal>
+        </div>
     )
 }
 

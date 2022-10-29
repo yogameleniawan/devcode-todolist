@@ -42,7 +42,7 @@ const Dashboard = () => {
         <div className="container flex flex-col">
             <div className="flex justify-between">
                 <h1 data-cy="activity-title" className="font-bold text-4xl py-10">Activity</h1>
-                {process ? <button data-cy="activity-add-button" className="font-bold text-lg main-color my-8 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></button> : <button data-cy="activity-add-button" className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl before:px-2" onClick={createActivity}>Tambah</button>}
+                {process ? <div data-cy="activity-add-button" ><button className="font-bold text-lg main-color my-8 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></button></div> : <div data-cy="activity-add-button" ><button className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl before:px-2" onClick={createActivity}>Tambah</button></div>}
             </div>
             {
                 activity.length === 0 ? <div data-cy="activity-empty-state" className="flex justify-center">
@@ -50,13 +50,17 @@ const Dashboard = () => {
                 </div> : <div className="flex flex-wrap gap-5">
                     {
                         activity.map((item, key) => (
-                            <div data-cy="activity-item-1" className="bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
-                                <Link to={"/detail/" + item.id} state={{ item: item }} className="text-black">
-                                    <h2 data-cy="activity-item-title" className="font-bold text-lg mb-24">{item.title} </h2>
-                                </Link>
+                            <div data-cy="activity-item" className="bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
+                                <div data-cy="activity-item-title">
+                                    <Link to={"/detail/" + item.id} state={{ item: item }} className="text-black">
+                                        <h2 className="font-bold text-lg mb-24">{item.title} </h2>
+                                    </Link>
+                                </div>
                                 <div className="z-10 flex justify-between align-center">
                                     <p data-cy="activity-item-delete-button" className="text-sm text-gray-500">{moment(item.created_at).locale('id', require('moment/locale/id')).format('D MMMM yyyy')}</p>
-                                    <button onClick={() => handleShowDelete(item)} data-cy="activity-item-date" className="text-xl text-gray-500"><i className='bx bx-trash'></i></button>
+                                    <div data-cy="activity-item-date">
+                                        <button onClick={() => handleShowDelete(item)} className="text-xl text-gray-500"><i className='bx bx-trash'></i></button>
+                                    </div>
                                 </div>
                             </div>
                         ))

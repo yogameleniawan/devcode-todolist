@@ -14,9 +14,11 @@ const DropdownFilter = () => {
 
     return (
         <Dropdown>
-            <Dropdown.Toggle data-cy="todo-sort-button" className="text-xl text-gray-400 my-8 px-3 py-2 mx-2 rounded-full border-sodivd border-gray-300 border hover:bg-transparent hover:text-gray-400 ">
-                <i className='bx bx-sort-alt-2 text-2xl'></i>
-            </Dropdown.Toggle>
+            <div data-cy="todo-sort-button">
+                <Dropdown.Toggle className="text-xl text-gray-400 my-8 px-3 py-2 mx-2 rounded-full border-sodivd border-gray-300 border hover:bg-transparent hover:text-gray-400 ">
+                    <i className='bx bx-sort-alt-2 text-2xl'></i>
+                </Dropdown.Toggle>
+            </div>
 
             <Dropdown.Menu className="w-64">
                 <Dropdown.Item>

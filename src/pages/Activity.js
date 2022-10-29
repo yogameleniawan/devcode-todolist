@@ -82,7 +82,7 @@ const Activity = () => {
                 </div>
                 {
                     todo.length === 0 ?
-                        <div data-cy="todo-empty-state" className="flex justify-center hover:cursor-pointer" onClick={handleShow}>
+                        <div data-cy="todo-empty-state" className="flex justify-center hover:cursor-pointer" onClick={() => { handleShow('add') }}>
                             <img src={image} alt="Todo Empty State" loading="lazy" />
                         </div> :
                         <div className="flex flex-col gap-2 items-center">

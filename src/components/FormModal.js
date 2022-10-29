@@ -118,7 +118,7 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit }) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <button onClick={() => handleSubmit()} data-cy="modal-add-save-button" className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === undefined : edit.title === ""}> Simpan</button>}
+                {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <button onClick={() => handleSubmit()} data-cy="modal-add-save-button" className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === "" : edit.title === ""}> Simpan</button>}
             </Modal.Footer>
         </Modal>
     )

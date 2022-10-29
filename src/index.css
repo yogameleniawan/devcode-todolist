@@ -33,3 +33,23 @@ code {
 .dropdown-toggle::after {
   display: none !important; 
 }
+
+.very-high {
+  background-color: #ED4C5C
+}
+
+.high {
+  background-color: #F8A541
+}
+
+.medium {
+  background-color: #00A790
+}
+
+.low {
+  background-color: #428BC1
+}
+
+.very-low {
+  background-color: #8942C1
+}

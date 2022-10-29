@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
@@ -18,17 +18,18 @@ const Activity = () => {
     const [show, setShow] = useState(false);
     const [type, setType] = useState(false);
     const [title, setTitle] = useState(location.state.item.title);
+    const [editItem, setEditItem] = useState([]);
     const [deleteItem, setDeleteItem] = useState([]);
     const [onLoad, setOnLoad] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
-
     const [editTitle, setEditTitle] = useState(false);
 
     const handleClose = () => setShow(false);
 
-    const handleShow = () => {
+    const handleShow = (type, item) => {
         setShow(true)
-        setType('add')
+        setType(type)
+        setEditItem(item)
     };
 
     const handleShowDelete = (item) => {
@@ -51,6 +52,11 @@ const Activity = () => {
         dispatch(updateData({ title: title, id: location.state.item.id.toString() }))
     };
 
+    const handleCheck = (item) => {
+        dispatch(updateDataTodo({ title: item.title, priority: item.priority, is_active: !item.is_active, id: item.id })).then(() => {
+        })
+    }
+
     useLayoutEffect(() => {
         setOnLoad(true)
         dispatch(getTodo(location.state.item.id.toString())).then(() => {
@@ -71,12 +77,12 @@ const Activity = () => {
                     </div>
                     <div className="flex">
                         <DropdownFilter></DropdownFilter>
-                        <button onClick={handleShow} data-cy="todo-add-button" className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl"> Tambah</button>
+                        <button onClick={() => handleShow('add')} data-cy="todo-add-button" className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl"> Tambah</button>
                     </div>
                 </div>
                 {
                     todo.length === 0 ?
-                        <div data-cy="todo-empty-state" className="flex justify-center">
+                        <div data-cy="todo-empty-state" className="flex justify-center hover:cursor-pointer" onClick={handleShow}>
                             <img src={image} alt="Todo Empty State" loading="lazy" />
                         </div> :
                         <div className="flex flex-col gap-2 items-center">
@@ -85,10 +91,10 @@ const Activity = () => {
                                     todo.map((item, key) => (
                                         <div key={key} data-cy="todo-item-1" className="bg-white rounded-lg shadow-xl p-5 w-full text-start flex justify-between">
                                             <div className="flex items-center">
-                                                <input data-cy="todo-item-checkbox" type="checkbox" className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                                <div data-cy="todo-item-priority-indicator" className="ml-5 w-2 h-2 bg-red-500 rounded-full"></div>
-                                                <h2 data-cy="todo-item-title" className="ml-5 font-bold text-lg">{item.title} </h2>
-                                                <button onClick={handleShow} data-cy="todo-item-edit-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-pencil'></i></button>
+                                                <input onChange={() => { handleCheck(item) }} checked={!item.is_active} data-cy="todo-item-checkbox" type="checkbox" className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                                                <div data-cy="todo-item-priority-indicator" className={item.priority === 'very-high' ? 'ml-5 w-2 h-2 rounded-full very-high' : item.priority === 'high' ? 'ml-5 w-2 h-2 rounded-full high' : item.priority === 'normal' ? 'ml-5 w-2 h-2 rounded-full medium' : item.priority === 'low' ? 'ml-5 w-2 h-2 rounded-full low' : 'ml-5 w-2 h-2 rounded-full very-low'}></div>
+                                                <h2 data-cy="todo-item-title" className={!item.is_active ? 'line-through ml-5 font-bold text-lg text-gray-400' : 'ml-5 font-bold text-lg'}>{item.title} </h2>
+                                                <button onClick={() => handleShow('edit', item)} data-cy="todo-item-edit-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-pencil'></i></button>
                                             </div>
                                             <div className="flex">
                                                 <button onClick={() => handleShowDelete(item)} data-cy="todo-item-delete-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-trash'></i></button>
@@ -99,7 +105,7 @@ const Activity = () => {
                         </div>
                 }
             </div>
-            <FormModal show={show} type={type} activity_group_id={location.state.item.id} handleClose={handleClose} />
+            <FormModal show={show} type={type} edit={editItem} activity_group_id={location.state.item.id} handleClose={handleClose} />
             <DeleteModal show={showDelete} item={deleteItem} type="todo" handleClose={handleCloseDelete}></DeleteModal>
         </>
     )

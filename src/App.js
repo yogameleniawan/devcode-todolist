@@ -16,8 +16,8 @@ function App() {
         </div>
         <div className="container mx-auto">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="detail" element={<Activity />} />
+            <Route exact path="/" element={<Dashboard />} />
+            <Route exact path="detail/:id" element={<Activity />} />
           </Routes>
         </div>
       </div>

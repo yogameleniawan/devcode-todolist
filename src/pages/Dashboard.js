@@ -24,7 +24,7 @@ const Dashboard = () => {
 
     const createActivity = () => {
         setProcess(true)
-        dispatch(create({ title: 'New Activity', email: 'tss@gmail.com' })).then((data) => {
+        dispatch(create({ title: 'New Activity', email: 'yogameleniawan@gmail.com' })).then((data) => {
             localStorage.setItem("activities", activity)
             setProcess(false)
         }).catch(e => {
@@ -51,7 +51,7 @@ const Dashboard = () => {
                     {
                         activity.map((item, key) => (
                             <div data-cy="activity-item-1" className="bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
-                                <Link to="/detail" className="text-black">
+                                <Link to={"/detail/" + item.id} state={{ item: item }} className="text-black">
                                     <h2 data-cy="activity-item-title" className="font-bold text-lg mb-24">{item.title} </h2>
                                 </Link>
                                 <div className="z-10 flex justify-between align-center">

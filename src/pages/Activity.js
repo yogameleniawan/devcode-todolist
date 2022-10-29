@@ -1,14 +1,19 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import DeleteModal from "../components/DeleteModal";
 import DropdownFilter from "../components/Dropdown";
 import FormModal from "../components/FormModal";
+import { updateData } from "../store/actions/activity";
 import image from './../assets/img/todo-empty-state.png';
 
 const Activity = () => {
+    const dispatch = useDispatch();
+    const location = useLocation();
     const titleInput = useRef(null);
 
     const [show, setShow] = useState(false);
+    const [title, setTitle] = useState(location.state.item.title);
 
     const [showDelete, setShowDelete] = useState(false);
 
@@ -17,9 +22,6 @@ const Activity = () => {
     const handleClose = () => setShow(false);
 
     const handleShow = () => setShow(true);
-
-    const handleCloseDelete = () => setShowDelete(false);
-
     const handleShowDelete = () => setShowDelete(true);
 
     const handleEditTitle = () => {
@@ -27,12 +29,13 @@ const Activity = () => {
     }
 
     const onChangeTitle = (e) => {
-        const html = e.target.innerHTML;
-        console.log(html)
+        setTitle(e.target.value)
     }
 
     const handleInputBlur = event => {
         setEditTitle(!editTitle);
+
+        dispatch(updateData({ title: title, id: location.state.item.id.toString() }))
     };
 
     return (
@@ -42,7 +45,7 @@ const Activity = () => {
                     <div className="flex items-center">
                         <Link to="/" data-cy="todo-back-button" className="text-4xl pr-5 text-black"><i className='bx bxs-chevron-left'></i></Link>
                         {
-                            editTitle ? <input ref={titleInput} onChange={onChangeTitle} onBlur={handleInputBlur} type="text" data-cy="todo-title" className="font-bold text-4xl pr-5 bg-transparent focus:outline-none focus:border-b-2 focus:border-b-gray-800" value="Activity" autoFocus /> : <h1 onClick={handleEditTitle} type="text" data-cy="todo-title" className="font-bold text-4xl py-8 pr-5 focus:outline-none" >Activity</h1>
+                            editTitle ? <input ref={titleInput} onChange={onChangeTitle} onBlur={handleInputBlur} type="text" data-cy="todo-title" className="font-bold text-4xl pr-5 bg-transparent focus:outline-none focus:border-b-2 focus:border-b-gray-800" value={title} autoFocus /> : <h1 onClick={handleEditTitle} type="text" data-cy="todo-title" className="font-bold text-4xl py-8 pr-5 focus:outline-none" >{title}</h1>
                         }
                         <button data-cy="todo-title-edit-button" className="text-xl text-gray-400" onClick={handleEditTitle}><i className='bx bx-pencil'></i></button>
                     </div>
@@ -69,7 +72,7 @@ const Activity = () => {
                 </div>
             </div>
             <FormModal show={show} handleClose={handleClose} />
-            <DeleteModal show={showDelete} handleClose={handleCloseDelete}></DeleteModal>
+            {/* <DeleteModal show={showDelete} handleClose={handleCloseDelete}></DeleteModal> */}
         </>
     )
 }

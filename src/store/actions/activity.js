@@ -36,6 +36,36 @@ export const create = ({
     }
 }
 
+export const updateData = ({
+    title,
+    id
+}) => async (dispatch) => {
+    try {
+        const data = {
+            title: title
+        }
+
+        const res = await Endpoint.updateActivity({
+            data,
+            id: id
+        });
+
+        let payload = {
+            id: res.data.id,
+            title: res.data.title,
+        }
+
+        dispatch({
+            type: UPDATE_ACTIVITY,
+            payload: payload,
+        });
+
+        return Promise.resolve(res.data);
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
+
 export const get = () => async (dispatch) => {
     try {
         const res = await Endpoint.getAllActivity();

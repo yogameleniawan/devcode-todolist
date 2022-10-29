@@ -48,7 +48,7 @@ const DeleteModal = ({ show, handleClose, item, type }) => {
                         <h1 data-cy="modal-delete-title" className="text-lg my-14">Apakah anda yakin menghapus List Item <p className="font-extrabold">"{item.title}"?</p></h1>
                         <div className="flex w-full justify-center">
                             <div data-cy="modal-delete-cancel-button"><button onClick={handleClose} className="font-bold text-lg bg-gray-100 mx-2 py-3 px-10 rounded-full text-black"> Batal</button></div>
-                            <div data-cy="modal-deletet-confirm-button"><button onClick={() => { handleDelete() }} className="font-bold text-lg bg-red-500 mx-2 py-3 px-10 rounded-full text-white"> {process ? <Spinner animation="border" variant="light"></Spinner> : 'Hapus'}</button></div>
+                            <div data-cy="modal-delete-confirm-button"><button onClick={() => { handleDelete() }} className="font-bold text-lg bg-red-500 mx-2 py-3 px-10 rounded-full text-white"> {process ? <Spinner animation="border" variant="light"></Spinner> : 'Hapus'}</button></div>
                         </div>
                     </Modal.Body>
                 </Modal>

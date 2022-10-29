@@ -42,7 +42,9 @@ const Dashboard = () => {
         <div className="container flex flex-col">
             <div className="flex justify-between">
                 <h1 data-cy="activity-title" className="font-bold text-4xl py-10">Activity</h1>
-                {process ? <div data-cy="activity-add-button" ><button className="font-bold text-lg main-color my-8 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></button></div> : <div data-cy="activity-add-button" ><button className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl before:px-2" onClick={createActivity}>Tambah</button></div>}
+                <div data-cy="activity-add-button" >
+                    {process ? <button className="font-bold text-lg main-color my-8 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></button> : <button className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl before:px-2" onClick={createActivity}>Tambah</button>}
+                </div>
             </div>
             {
                 activity.length === 0 ? <div data-cy="activity-empty-state" className="flex justify-center">

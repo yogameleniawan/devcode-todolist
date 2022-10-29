@@ -104,7 +104,9 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit }) => {
                             <div data-cy="modal-add-name-title">
                                 <Form.Label>Nama List Item</Form.Label>
                             </div>
-                            <Form.Control ref={titleInput} defaultValue={edit === undefined ? title : edit.title} onChange={(e) => handleChangeTitle(e)} data-cy="modal-add-name-input" type="text" placeholder="Nama List Item" />
+                            <div data-cy="modal-add-name-input">
+                                <Form.Control ref={titleInput} defaultValue={edit === undefined ? title : edit.title} onChange={(e) => handleChangeTitle(e)} type="text" placeholder="Nama List Item" />
+                            </div>
                         </Form.Group>
                         <Form.Group className="mb-3 w-44" controlId="exampleForm.ControlInput1">
                             <div data-cy="modal-add-priority-title">
@@ -126,7 +128,9 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <div data-cy="modal-add-save-button"><button onClick={() => handleSubmit()} className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === "" : edit.title === ""}> Simpan</button></div>}
+                    <div data-cy="modal-add-save-button">
+                        {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <button onClick={() => handleSubmit()} className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === "" : edit.title === ""}> Simpan</button>}
+                    </div>
                 </Modal.Footer>
             </Modal>
         </div>

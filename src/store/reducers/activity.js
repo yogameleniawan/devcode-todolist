@@ -5,9 +5,9 @@ import {
     DELETE_ACTIVITY,
 } from '../actions/type';
 
-const initialState = [];
+const stateActivity = [];
 
-function activityReducer(activities = initialState, action) {
+function activityReducer(activities = stateActivity, action) {
     const {
         type,
         payload

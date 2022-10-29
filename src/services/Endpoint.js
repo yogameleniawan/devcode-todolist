@@ -1,8 +1,7 @@
 import http from './Base';
-import qs from 'qs';
 
 const getAllActivity = () => {
-    return http.get("/activity-groups?email=yogameleniawan");
+    return http.get("/activity-groups?email=tss@gmail.com");
 };
 
 const createActivity = (data) => {
@@ -13,9 +12,18 @@ const createActivity = (data) => {
     });
 };
 
+const deleteActivity = (id) => {
+    return http.delete("/activity-groups/" + id, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+};
+
 const Endpoint = {
     getAllActivity,
-    createActivity
+    createActivity,
+    deleteActivity
 };
 
 export default Endpoint;

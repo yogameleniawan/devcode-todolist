@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import {
     CREATE_ACTIVITY,
     GET_ACTIVITY,
@@ -18,9 +19,15 @@ export const create = ({
             email
         });
 
+        let payload = {
+            id: res.data.id,
+            title: res.data.title,
+            email: res.data.email,
+        }
+
         dispatch({
             type: CREATE_ACTIVITY,
-            payload: res.data,
+            payload: payload,
         });
 
         return Promise.resolve(res.data);
@@ -32,10 +39,36 @@ export const create = ({
 export const get = () => async (dispatch) => {
     try {
         const res = await Endpoint.getAllActivity();
+        localStorage.setItem("activities", JSON.stringify(res.data.data));
+
+        JSON.parse(localStorage.getItem("activities")).forEach(item => {
+            dispatch({
+                type: CREATE_ACTIVITY,
+                payload: {
+                    id: item.id,
+                    title: item.title,
+                    email: item.email
+                },
+            });
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const deleteData = (item) => async (dispatch) => {
+    try {
+        const res = await Endpoint.deleteActivity(item.id);
+
+        let payload = {
+            id: item.id,
+            title: item.title,
+            email: item.email,
+        }
 
         dispatch({
-            type: GET_ACTIVITY,
-            payload: res.data,
+            type: DELETE_ACTIVITY,
+            payload: payload,
         });
     } catch (err) {
         console.log(err);

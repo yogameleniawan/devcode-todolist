@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deleteData } from './../store/actions/activity';
 
 const DeleteModal = ({ show, handleClose, item }) => {
@@ -24,7 +24,7 @@ const DeleteModal = ({ show, handleClose, item }) => {
 
     return (
         <>
-            <Modal data-cy="modal-delete" show={show} onHide={handleClose} size="md">
+            <Modal data-cy="modal-delete" show={show} onHide={handleClose} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body className="flex flex-col justify-center items-center text-center">
                     <svg data-cy="modal-delete-icon" width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M42 52.5V52.535M42 31.5V38.5V31.5Z" stroke="#ED4C5C" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
@@ -37,11 +37,11 @@ const DeleteModal = ({ show, handleClose, item }) => {
                     </div>
                 </Modal.Body>
             </Modal>
-            <Modal data-cy="modal-information" show={alert} onHide={handleCloseAlert} size="md">
-                <Modal.Body className="flex justify-center items-center text-center">
+            <Modal data-cy="modal-information" show={alert} onHide={handleCloseAlert} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
+                <div className="flex justify-center items-center text-center h-16">
                     <i data-cy="modal-information-icon" className="bx bx-info-circle text-green-600 px-2"></i>
                     <p data-cy="modal-information-title" className="text-lg my-14">Activity Berhasil dihapus</p>
-                </Modal.Body>
+                </div>
             </Modal>
         </>
     );

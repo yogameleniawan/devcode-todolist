@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Modal, Spinner } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { deleteData } from './../store/actions/activity';
+import { deleteDataTodo } from './../store/actions/todo';
 
-const DeleteModal = ({ show, handleClose, item }) => {
+const DeleteModal = ({ show, handleClose, item, type }) => {
     const dispatch = useDispatch();
 
     const [process, setProcess] = useState(false);
@@ -13,11 +14,24 @@ const DeleteModal = ({ show, handleClose, item }) => {
         setAlert(false);
     }
 
-    const deleteActivity = () => {
+    const handleDelete = () => {
         setProcess(true)
-        dispatch(deleteData(item)).then(() => {
-            setProcess(false)
-        })
+        switch (type) {
+            case 'activity':
+                dispatch(deleteData(item)).then(() => {
+                    setProcess(false)
+                })
+                break;
+            case 'todo':
+                dispatch(deleteDataTodo(item)).then(() => {
+                    setProcess(false)
+                })
+                break;
+
+            default:
+                break;
+        }
+
         handleClose()
         setAlert(true);
     }
@@ -33,7 +47,7 @@ const DeleteModal = ({ show, handleClose, item }) => {
                     <h1 data-cy="modal-delete-title" className="text-lg my-14">Apakah anda yakin menghapus List Item <p className="font-extrabold">"{item.title}"?</p></h1>
                     <div className="flex w-full justify-center">
                         <button onClick={handleClose} data-cy="modal-delete-cancel-button" className="font-bold text-lg bg-gray-100 mx-2 py-3 px-10 rounded-full text-black"> Batal</button>
-                        <button onClick={() => { deleteActivity() }} data-cy="modal-deletet-confirm-button" className="font-bold text-lg bg-red-500 mx-2 py-3 px-10 rounded-full text-white"> {process ? <Spinner animation="border" variant="light"></Spinner> : 'Hapus'}</button>
+                        <button onClick={() => { handleDelete() }} data-cy="modal-deletet-confirm-button" className="font-bold text-lg bg-red-500 mx-2 py-3 px-10 rounded-full text-white"> {process ? <Spinner animation="border" variant="light"></Spinner> : 'Hapus'}</button>
                     </div>
                 </Modal.Body>
             </Modal>

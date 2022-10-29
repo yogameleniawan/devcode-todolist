@@ -1,20 +1,23 @@
-import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import DeleteModal from "../components/DeleteModal";
 import DropdownFilter from "../components/Dropdown";
 import FormModal from "../components/FormModal";
 import { updateData } from "../store/actions/activity";
+import { getTodo, updateDataTodo } from "../store/actions/todo";
 import image from './../assets/img/todo-empty-state.png';
 
 const Activity = () => {
+    const todo = useSelector(state => state.todos);
     const dispatch = useDispatch();
     const location = useLocation();
     const titleInput = useRef(null);
 
     const [show, setShow] = useState(false);
     const [title, setTitle] = useState(location.state.item.title);
-
+    const [onLoad, setOnLoad] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
     const [editTitle, setEditTitle] = useState(false);
@@ -22,6 +25,7 @@ const Activity = () => {
     const handleClose = () => setShow(false);
 
     const handleShow = () => setShow(true);
+
     const handleShowDelete = () => setShowDelete(true);
 
     const handleEditTitle = () => {
@@ -37,6 +41,13 @@ const Activity = () => {
 
         dispatch(updateData({ title: title, id: location.state.item.id.toString() }))
     };
+
+    useLayoutEffect(() => {
+        setOnLoad(true)
+        dispatch(getTodo(location.state.item.id.toString())).then(() => {
+            setOnLoad(false)
+        });
+    }, [])
 
     return (
         <>
@@ -54,22 +65,30 @@ const Activity = () => {
                         <button onClick={handleShow} data-cy="todo-add-button" className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl"> Tambah</button>
                     </div>
                 </div>
-                {/* <div data-cy="todo-empty-state" className="flex justify-center">
-            <img src={image} alt="Todo Empty State" loading="lazy" />
-        </div> */}
-                <div className="flex">
-                    <div data-cy="todo-item-1" className="bg-white rounded-lg shadow-xl p-5 w-full text-start flex justify-between">
-                        <div className="flex items-center">
-                            <input data-cy="todo-item-checkbox" type="checkbox" className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <div data-cy="todo-item-priority-indicator" className="ml-5 w-2 h-2 bg-red-500 rounded-full"></div>
-                            <h2 data-cy="todo-item-title" className="ml-5 font-bold text-lg">Daftar Belanja Bulanan </h2>
-                            <button onClick={handleShow} data-cy="todo-item-edit-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-pencil'></i></button>
+                {
+                    todo.length === 0 ?
+                        <div data-cy="todo-empty-state" className="flex justify-center">
+                            <img src={image} alt="Todo Empty State" loading="lazy" />
+                        </div> :
+                        <div className="flex flex-col gap-2 items-center">
+                            {
+                                onLoad ? <Spinner animation="border" variant="primary" /> :
+                                    todo.map((item, key) => (
+                                        <div key={key} data-cy="todo-item-1" className="bg-white rounded-lg shadow-xl p-5 w-full text-start flex justify-between">
+                                            <div className="flex items-center">
+                                                <input data-cy="todo-item-checkbox" type="checkbox" className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                                                <div data-cy="todo-item-priority-indicator" className="ml-5 w-2 h-2 bg-red-500 rounded-full"></div>
+                                                <h2 data-cy="todo-item-title" className="ml-5 font-bold text-lg">{item.title} </h2>
+                                                <button onClick={handleShow} data-cy="todo-item-edit-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-pencil'></i></button>
+                                            </div>
+                                            <div className="flex">
+                                                <button onClick={handleShowDelete} data-cy="todo-item-delete-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-trash'></i></button>
+                                            </div>
+                                        </div>
+                                    ))
+                            }
                         </div>
-                        <div className="flex">
-                            <button onClick={handleShowDelete} data-cy="todo-item-delete-button" className="ml-5 text-xl text-gray-400"><i className='bx bx-trash'></i></button>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
             <FormModal show={show} handleClose={handleClose} />
             {/* <DeleteModal show={showDelete} handleClose={handleCloseDelete}></DeleteModal> */}

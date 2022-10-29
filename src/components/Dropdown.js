@@ -57,8 +57,8 @@ const DropdownFilter = () => {
                     <div data-cy="sort-unfinished" className="hover:cursor-pointer  hover:rounded-md">
                         <div className="flex items-center justify-between ">
                             <div className="flex items-center">
-                                <i className='text-lg bx bx-sort-z-a text-blue-400 mx-2'></i>
-                                <p className="text-lg">Z - A</p>
+                                <i className='text-lg bx bx-sort-alt-2 text-blue-400 mx-2'></i>
+                                <p className="text-lg">Belum Selesai</p>
                             </div>
                         </div>
                     </div>

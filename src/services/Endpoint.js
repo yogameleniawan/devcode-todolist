@@ -31,11 +31,46 @@ const deleteActivity = (id) => {
     });
 };
 
+const getAllTodo = (id) => {
+    return http.get(`/todo-items?activity_group_id=${id}`);
+}
+
+const createTodo = (data) => {
+    return http.post("/todo-items", JSON.stringify(data), {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+};
+
+const updateTodo = ({
+    data,
+    id
+}) => {
+    return http.patch(`/todo-items/${id}`, JSON.stringify(data), {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+};
+
+const deleteTodo = (id) => {
+    return http.delete("/todo-items/" + id, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+};
+
 const Endpoint = {
     getAllActivity,
     createActivity,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    getAllTodo,
+    createTodo,
+    updateTodo,
+    deleteTodo
 };
 
 export default Endpoint;

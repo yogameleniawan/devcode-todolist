@@ -55,7 +55,7 @@ const Dashboard = () => {
                                     <h2 data-cy="activity-item-title" className="font-bold text-lg mb-24">{item.title} </h2>
                                 </Link>
                                 <div className="z-10 flex justify-between align-center">
-                                    <p data-cy="activity-item-delete-button" className="text-sm text-gray-500">{moment(item.created_at).locale('id', require('moment/locale/id')).format('d MMMM yyyy')}</p>
+                                    <p data-cy="activity-item-delete-button" className="text-sm text-gray-500">{moment(item.created_at).locale('id', require('moment/locale/id')).format('D MMMM yyyy')}</p>
                                     <button onClick={() => handleShowDelete(item)} data-cy="activity-item-date" className="text-xl text-gray-500"><i className='bx bx-trash'></i></button>
                                 </div>
                             </div>

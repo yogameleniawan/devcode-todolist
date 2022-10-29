@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import {
     CREATE_ACTIVITY,
-    GET_ACTIVITY,
     UPDATE_ACTIVITY,
     DELETE_ACTIVITY,
 } from './type';
@@ -88,7 +87,7 @@ export const get = () => async (dispatch) => {
 
 export const deleteData = (item) => async (dispatch) => {
     try {
-        const res = await Endpoint.deleteActivity(item.id);
+        await Endpoint.deleteActivity(item.id);
 
         let payload = {
             id: item.id,

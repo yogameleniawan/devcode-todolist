@@ -1,10 +1,14 @@
 /* eslint-disable array-callback-return */
 import {
     CREATE_TODO,
-    GET_TODO,
     UPDATE_TODO,
     DELETE_TODO,
-    DELETE_ALL
+    DELETE_ALL,
+    FILTER_AZ,
+    FILTER_LATEST,
+    FILTER_ZA,
+    FILTER_OLDEST,
+    FILTER_UNFINISHED
 } from './type';
 
 import Endpoint from '../../services/Endpoint';
@@ -26,6 +30,7 @@ export const createTodo = ({
             title: res.data.title,
             priority: res.data.priority,
             is_active: res.data.is_active,
+            created_at: res.data.created_at,
         }
 
         dispatch({
@@ -63,6 +68,7 @@ export const updateDataTodo = ({
             title: res.data.title,
             priority: res.data.priority,
             is_active: res.data.is_active,
+            created_at: res.data.created_at,
         }
 
         dispatch({
@@ -82,15 +88,18 @@ export const getTodo = (id) => async (dispatch) => {
         dispatch({
             type: DELETE_ALL
         });
-        res.data.data.forEach(item => {
+
+        res.data.data.forEach(async item => {
+            const result = await Endpoint.getOneTodo(item.id);
             dispatch({
                 type: CREATE_TODO,
                 payload: {
-                    id: item.id,
-                    activity_group_id: item.activity_group_id,
-                    title: item.title,
-                    priority: item.priority,
-                    is_active: item.is_active,
+                    id: result.data.id,
+                    activity_group_id: result.data.activity_group_id,
+                    title: result.data.title,
+                    priority: result.data.priority,
+                    is_active: result.data.is_active,
+                    created_at: result.data.created_at,
                 },
             });
         });
@@ -101,7 +110,7 @@ export const getTodo = (id) => async (dispatch) => {
 
 export const deleteDataTodo = (item) => async (dispatch) => {
     try {
-        const res = await Endpoint.deleteTodo(item.id);
+        await Endpoint.deleteTodo(item.id);
 
         let payload = {
             id: item.id,
@@ -117,3 +126,41 @@ export const deleteDataTodo = (item) => async (dispatch) => {
         console.log(err);
     }
 };
+
+
+export const filterData = (type) => async (dispatch) => {
+    try {
+        switch (type) {
+            case 'sort-latest':
+                dispatch({
+                    type: FILTER_LATEST,
+                })
+                break;
+            case 'sort-oldest':
+                dispatch({
+                    type: FILTER_OLDEST,
+                })
+                break;
+            case 'sort-az':
+                dispatch({
+                    type: FILTER_AZ,
+                })
+                break;
+            case 'sort-za':
+                dispatch({
+                    type: FILTER_ZA,
+                })
+                break;
+            case 'sort-unfinished':
+                dispatch({
+                    type: FILTER_UNFINISHED,
+                })
+                break;
+
+            default:
+                break;
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}

@@ -35,6 +35,10 @@ const getAllTodo = (id) => {
     return http.get(`/todo-items?activity_group_id=${id}`);
 }
 
+const getOneTodo = (id) => {
+    return http.get(`/todo-items/${id}`);
+}
+
 const createTodo = (data) => {
     return http.post("/todo-items", JSON.stringify(data), {
         headers: {
@@ -68,6 +72,7 @@ const Endpoint = {
     updateActivity,
     deleteActivity,
     getAllTodo,
+    getOneTodo,
     createTodo,
     updateTodo,
     deleteTodo

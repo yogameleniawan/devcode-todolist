@@ -68,7 +68,7 @@ const Dashboard = () => {
                 </div> : <div className="flex flex-wrap gap-5">
                     {
                         activities.map((item, key) => (
-                            <div data-cy={"activity-item-" + key} className="bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
+                            <div data-cy="activity-item" className="bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
                                 <div data-cy="activity-item-title">
                                     <Link to={"/detail/" + item.id} state={{ item: item }} className="text-black">
                                         <h2 className="font-bold text-lg mb-24">{item.title} </h2>

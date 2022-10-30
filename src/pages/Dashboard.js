@@ -68,12 +68,11 @@ const Dashboard = () => {
                 </div> : <div className="flex flex-wrap gap-5">
                     {
                         activities.map((item, key) => (
-                            <div data-cy="activity-item" className="bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
-                                <div data-cy="activity-item-title">
-                                    <Link to={"/detail/" + item.id} state={{ item: item }} className="text-black">
-                                        <h2 className="font-bold text-lg mb-24">{item.title} </h2>
-                                    </Link>
-                                </div>
+
+                            <div data-cy="activity-item" className="flex flex-col justify-between bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
+                                <Link data-cy="activity-item-title" to={"/detail/" + item.id} state={{ item: item }} className="text-black">
+                                    <h2 className="font-bold text-lg mb-24">{item.title} </h2>
+                                </Link>
                                 <div className="z-10 flex justify-between align-center">
                                     <p data-cy="activity-item-date" className="text-sm text-gray-500">{moment(item.created_at).locale('id', require('moment/locale/id')).format('D MMMM yyyy')}</p>
                                     <div data-cy="activity-item-delete-button">
@@ -86,7 +85,7 @@ const Dashboard = () => {
                 </div>
             }
             <DeleteModal show={showDelete} item={deleteItem} type="activity" handleClose={handleCloseDelete} deleteData={deleteDate}></DeleteModal>
-        </div>
+        </div >
     )
 }
 

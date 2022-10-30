@@ -5,7 +5,7 @@ import Endpoint from "../services/Endpoint";
 const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }) => {
 
     const titleInput = useRef();
-    const [title, setTitle] = useState();
+    const [title, setTitle] = useState("");
     const [isSubmit, setIsSubmit] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
@@ -140,9 +140,9 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <div data-cy="modal-add-save-button">
-                        {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <button onClick={() => handleSubmit()} className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === "" : edit.title === ""}> Simpan</button>}
-                    </div>
+
+                    {isSubmit ? <div className="font-bold text-lg main-color py-3 px-10 rounded-full text-white"><Spinner animation="border" variant="light" /></div> : <button data-cy="modal-add-save-button" onClick={() => handleSubmit()} className="font-bold text-lg main-color py-3 px-10 rounded-full text-white disabled:opacity-50" disabled={edit === undefined ? title === "" || valueDropdown === '' || valueDropdown === 'select' : edit.title === "" || valueDropdown === '' || valueDropdown === 'select'}> Simpan</button>}
+
                 </Modal.Footer>
             </Modal>
         </div>

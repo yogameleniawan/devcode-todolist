@@ -20,6 +20,7 @@ const Activity = () => {
     const [onLoad, setOnLoad] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [editTitle, setEditTitle] = useState(false);
+    const [filterType, setFilterType] = useState(todos);
 
     const getDetail = async () => {
         const res = await Endpoint.getAllTodo(location.state.item.id.toString());
@@ -74,48 +75,7 @@ const Activity = () => {
     }
 
     const filterData = (type) => {
-        try {
-            switch (type) {
-                case 'sort-latest':
-                    const latest = todos.sort(function (a, b) {
-                        if (a.created_at === undefined || b.created_at === undefined) {
-                            return a.title.localeCompare(b.title);
-                        } else {
-                            return a.created_at.localeCompare(b.created_at);
-                        }
-                    });
-                    return [...latest];
-                case 'sort-oldest':
-                    const oldest = todos.sort(function (a, b) {
-                        if (a.created_at === undefined || b.created_at === undefined) {
-                            return b.title.localeCompare(a.title);
-                        } else {
-                            return b.created_at.localeCompare(a.created_at);
-                        }
-                    });
-                    return [...oldest];
-                case 'sort-az':
-                    const descending = todos.sort(function (a, b) {
-                        return b.title.localeCompare(a.title);
-                    });
-                    return [...descending];
-                case 'sort-za':
-                    const ascending = todos.sort(function (a, b) {
-                        return a.title.localeCompare(b.title);
-                    });
-                    return [...ascending];
-                case 'sort-unfinished':
-                    const unfinished = todos.sort(function (a, b) {
-                        return b.is_active.toString().localeCompare(a.is_active.toString());
-                    });
-                    return [...unfinished];
-
-                default:
-                    break;
-            }
-        } catch (err) {
-            console.log(err)
-        }
+        setFilterType(type)
     }
 
     const handleClose = () => setShow(false);
@@ -186,7 +146,31 @@ const Activity = () => {
                         <div className="flex flex-col gap-2 items-center">
                             {
                                 onLoad ? <Spinner animation="border" variant="primary" /> :
-                                    todos.map((item, key) => (
+                                    todos.sort((a, b) => {
+                                        switch (filterType) {
+                                            case 'sort-latest':
+                                                if (a.created_at === undefined || b.created_at === undefined) {
+                                                    return a.title.localeCompare(b.title);
+                                                } else {
+                                                    return a.created_at.localeCompare(b.created_at);
+                                                }
+                                            case 'sort-oldest':
+
+                                                if (a.created_at === undefined || b.created_at === undefined) {
+                                                    return b.title.localeCompare(a.title);
+                                                } else {
+                                                    return b.created_at.localeCompare(a.created_at);
+                                                }
+                                            case 'sort-az':
+                                                return a.title.localeCompare(b.title)
+                                            case 'sort-za':
+                                                return b.title.localeCompare(a.title)
+                                            case 'sort-unfinished':
+                                                return b.is_active.toString().localeCompare(a.is_active.toString())
+                                            default:
+                                                break;
+                                        }
+                                    }).map((item, key) => (
                                         <div key={key} data-cy="todo-item-1" className="bg-white rounded-lg shadow-xl p-5 w-full text-start flex justify-between">
                                             <div className="flex items-center">
                                                 <input onChange={() => { handleCheck(item) }} checked={!item.is_active} data-cy="todo-item-checkbox" type="checkbox" className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />

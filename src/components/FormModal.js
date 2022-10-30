@@ -86,52 +86,52 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }
                                 <Form.Label >Priority</Form.Label>
                             </div>
 
-                            <div class="relative">
-                                <div onClick={() => { showDropdown() }} data-cy="modal-add-priority-dropdown" class="bg-white  flex flex-col p-2 border  border-gray-300 rounded-xl w-52">
-                                    <div class="flex py-2 px-2 items-center justify-between w-full">
+                            <div className="relative">
+                                <div onClick={() => { showDropdown() }} data-cy="modal-add-priority-dropdown" className="bg-white  flex flex-col p-2 border  border-gray-300 rounded-xl w-52">
+                                    <div className="flex py-2 px-2 items-center justify-between w-full">
                                         {
                                             valueDropdown === 'select' ? 'Pilih Priority' :
-                                                <div class="flex items-center">
-                                                    <div class={valueDropdown === 'very-high' ? "very-high h-2 w-2 rounded-full mr-2" : valueDropdown === 'high' ? "high h-2 w-2 rounded-full mr-2" : valueDropdown === 'normal' ? "medium h-2 w-2 rounded-full mr-2" : valueDropdown === 'low' ? "low h-2 w-2 rounded-full mr-2" : "very-low h-2 w-2 rounded-full mr-2"}>
+                                                <div className="flex items-center">
+                                                    <div className={valueDropdown === 'very-high' ? "very-high h-2 w-2 rounded-full mr-2" : valueDropdown === 'high' ? "high h-2 w-2 rounded-full mr-2" : valueDropdown === 'normal' ? "medium h-2 w-2 rounded-full mr-2" : valueDropdown === 'low' ? "low h-2 w-2 rounded-full mr-2" : "very-low h-2 w-2 rounded-full mr-2"}>
                                                     </div>{valueDropdown === 'very-high' ? "Very High" : valueDropdown === 'high' ? "High" : valueDropdown === 'normal' ? "Medium" : valueDropdown === 'low' ? "Low" : "Very Low"}</div>
                                         }
-                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="#111111" stroke-linecap="square"></path></svg>
+                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="#111111" strokeLinecap="square"></path></svg>
                                     </div>
                                 </div>
                             </div>
-                            <div class={showModal ? 'absolute' : 'hidden'}  >
-                                <div onClick={() => { changeDropdown('very-high') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
-                                    <div class="flex py-2 px-2 items-center justify-between w-full">
-                                        <div class="flex items-center">
-                                            <div class="very-high h-2 w-2 rounded-full mr-2">
+                            <div className={showModal ? 'absolute' : 'hidden'}  >
+                                <div onClick={() => { changeDropdown('very-high') }} data-cy="modal-add-priority-item" className="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div className="flex py-2 px-2 items-center justify-between w-full">
+                                        <div className="flex items-center">
+                                            <div className="very-high h-2 w-2 rounded-full mr-2">
                                             </div>Very High</div>
                                     </div>
                                 </div>
-                                <div onClick={() => { changeDropdown('high') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
-                                    <div class="flex py-2 px-2 items-center justify-between w-full">
-                                        <div class="flex items-center">
-                                            <div class="high h-2 w-2 rounded-full mr-2">
+                                <div onClick={() => { changeDropdown('high') }} data-cy="modal-add-priority-item" className="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div className="flex py-2 px-2 items-center justify-between w-full">
+                                        <div className="flex items-center">
+                                            <div className="high h-2 w-2 rounded-full mr-2">
                                             </div>High</div>
                                     </div>
                                 </div>
-                                <div onClick={() => { changeDropdown('normal') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
-                                    <div class="flex py-2 px-2 items-center justify-between w-full">
-                                        <div class="flex items-center">
-                                            <div class="medium h-2 w-2 rounded-full mr-2">
+                                <div onClick={() => { changeDropdown('normal') }} data-cy="modal-add-priority-item" className="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div className="flex py-2 px-2 items-center justify-between w-full">
+                                        <div className="flex items-center">
+                                            <div className="medium h-2 w-2 rounded-full mr-2">
                                             </div>Medium</div>
                                     </div>
                                 </div>
-                                <div onClick={() => { changeDropdown('low') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
-                                    <div class="flex py-2 px-2 items-center justify-between w-full">
-                                        <div class="flex items-center">
-                                            <div class="low h-2 w-2 rounded-full mr-2">
+                                <div onClick={() => { changeDropdown('low') }} data-cy="modal-add-priority-item" className="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div className="flex py-2 px-2 items-center justify-between w-full">
+                                        <div className="flex items-center">
+                                            <div className="low h-2 w-2 rounded-full mr-2">
                                             </div>Low</div>
                                     </div>
                                 </div>
-                                <div onClick={() => { changeDropdown('very-low') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
-                                    <div class="flex py-2 px-2 items-center justify-between w-full">
-                                        <div class="flex items-center">
-                                            <div class="very-low h-2 w-2 rounded-full mr-2">
+                                <div onClick={() => { changeDropdown('very-low') }} data-cy="modal-add-priority-item" className="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div className="flex py-2 px-2 items-center justify-between w-full">
+                                        <div className="flex items-center">
+                                            <div className="very-low h-2 w-2 rounded-full mr-2">
                                             </div>Very Low</div>
                                     </div>
                                 </div>

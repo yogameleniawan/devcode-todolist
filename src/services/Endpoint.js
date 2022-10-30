@@ -4,6 +4,10 @@ const getAllActivity = () => {
     return http.get("/activity-groups?email=yogameleniawan@gmail.com");
 };
 
+const getDetail = (id) => {
+    return http.get("/activity-groups/" + id);
+};
+
 const createActivity = (data) => {
     return http.post("/activity-groups", JSON.stringify(data), {
         headers: {
@@ -36,7 +40,7 @@ const getAllTodo = (id) => {
 }
 
 const getOneTodo = (id) => {
-    return http.get(`/todo-items/${id}`);
+    return http.get(`/activity-groups/${id}`);
 }
 
 const createTodo = (data) => {
@@ -68,6 +72,7 @@ const deleteTodo = (id) => {
 
 const Endpoint = {
     getAllActivity,
+    getDetail,
     createActivity,
     updateActivity,
     deleteActivity,

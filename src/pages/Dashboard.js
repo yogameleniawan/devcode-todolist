@@ -70,7 +70,7 @@ const Dashboard = () => {
                         activities.map((item, key) => (
 
                             <div data-cy="activity-item" className="flex flex-col justify-between bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
-                                <Link data-cy="activity-item-title" to={"/detail/" + item.id} state={{ item: item }} className="text-black">
+                                <Link data-cy="activity-item-title" to={"/detail/" + item.id} className="text-black">
                                     <h2 className="font-bold text-lg mb-24">{item.title} </h2>
                                 </Link>
                                 <div className="z-10 flex justify-between align-center">

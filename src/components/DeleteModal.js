@@ -11,10 +11,11 @@ const DeleteModal = ({ show, handleClose, item, type, deleteData }) => {
         setAlert(false);
     }
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         setProcess(true)
         switch (type) {
             case 'activity':
+                await Endpoint.deleteActivity(item.id)
                 deleteData();
                 setProcess(false)
                 break;

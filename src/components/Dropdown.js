@@ -18,7 +18,7 @@ const DropdownFilter = ({ filterData }) => {
             </div>
 
             <Dropdown.Menu className="w-64">
-                <Dropdown.Item>
+                <Dropdown.Item data-cy="sort-selection" data-index="0">
                     <div onClick={() => changeFilter('sort-latest')} data-cy="sort-latest" className="hover:cursor-pointer  hover:rounded-md">
                         <div className="flex  items-center justify-between ">
                             <div className="flex items-center">
@@ -30,7 +30,7 @@ const DropdownFilter = ({ filterData }) => {
                     </div>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item>
+                <Dropdown.Item data-cy="sort-selection" data-index="1">
                     <div onClick={() => changeFilter('sort-oldest')} data-cy="sort-oldest" className="hover:cursor-pointer hover:rounded-md">
                         <div className="flex  items-center justify-between ">
                             <div className="flex items-center">
@@ -43,7 +43,7 @@ const DropdownFilter = ({ filterData }) => {
                     </div>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item>
+                <Dropdown.Item data-cy="sort-selection" data-index="2">
                     <div onClick={() => changeFilter('sort-az')} data-cy="sort-az" className="hover:cursor-pointer  hover:rounded-md">
                         <div className="flex  items-center justify-between ">
                             <div className="flex items-center">
@@ -55,7 +55,7 @@ const DropdownFilter = ({ filterData }) => {
                     </div>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item>
+                <Dropdown.Item data-cy="sort-selection" data-index="3">
                     <div onClick={() => changeFilter('sort-za')} data-cy="sort-za" className="hover:cursor-pointer  hover:rounded-md">
                         <div className="flex items-center justify-between ">
                             <div className="flex items-center">
@@ -67,7 +67,7 @@ const DropdownFilter = ({ filterData }) => {
                     </div>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item>
+                <Dropdown.Item data-cy="sort-selection" data-index="4">
                     <div onClick={() => changeFilter('sort-unfinished')} data-cy="sort-unfinished" className="hover:cursor-pointer  hover:rounded-md">
                         <div className="flex items-center justify-between ">
                             <div className="flex items-center">

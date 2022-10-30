@@ -1,63 +1,19 @@
 import { useRef, useState } from "react";
 import { Form, Modal, Spinner } from "react-bootstrap";
-import Select from 'react-select';
 import Endpoint from "../services/Endpoint";
 
 const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }) => {
 
-    const priority = useRef();
     const titleInput = useRef();
     const [title, setTitle] = useState();
     const [isSubmit, setIsSubmit] = useState(false);
 
-    const colourOptions = [
-        { value: 'very-high', label: 'Very High', color: '#ED4C5C' },
-        { value: 'high', label: 'High', color: '#F8A541' },
-        { value: 'normal', label: 'Medium', color: '#00A790' },
-        { value: 'low', label: 'Low', color: '#428BC1' },
-        { value: 'very-low', label: 'Very Low', color: '#8942C1' },
-    ];
+    const [showModal, setShowModal] = useState(false);
+    const [valueDropdown, setValueDropdown] = useState("");
 
-    const customStyles = {
-        menu: (provided, state) => ({
-            ...provided,
-            width: 200,
-            borderBottom: '1px dotted pink',
-            color: 'black',
-        }),
-        option: (styles, { data }) => {
-            return {
-                ...styles,
-                alignItems: 'center',
-                display: 'flex',
-
-                ':before': {
-                    backgroundColor: data.color,
-                    borderRadius: 20,
-                    content: '" "',
-                    display: 'block',
-                    marginRight: 10,
-                    height: 15,
-                    width: 15,
-                },
-            };
-        },
-        singleValue: (styles, { data }) => {
-            return {
-                ...styles,
-                alignItems: 'center',
-                display: 'flex',
-                ':before': {
-                    backgroundColor: data.color,
-                    borderRadius: 20,
-                    content: '" "',
-                    display: 'block',
-                    marginRight: 10,
-                    height: 15,
-                    width: 15,
-                },
-            };
-        }
+    const showDropdown = () => {
+        setShowModal(!showModal)
+        setValueDropdown('select')
     }
 
     const handleSubmit = async () => {
@@ -66,7 +22,7 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }
             case "add":
                 const create = await Endpoint.createTodo({ activity_group_id: activity_group_id, title: titleInput.current.value });
 
-                const data = { title: titleInput.current.value, priority: priority.current.props.value.value, is_active: true, id: activity_group_id }
+                const data = { title: titleInput.current.value, priority: valueDropdown, is_active: true, id: activity_group_id }
 
                 await Endpoint.updateTodo({
                     data,
@@ -81,7 +37,7 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }
             case "edit":
                 let payload = {
                     title: titleInput.current.value,
-                    priority: priority.current.props.value.value,
+                    priority: valueDropdown,
                     is_active: edit.is_active,
                 }
                 await Endpoint.updateTodo({
@@ -100,6 +56,11 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }
 
     const handleChangeTitle = (e) => {
         setTitle(e.target.value);
+    }
+
+    const changeDropdown = (value) => {
+        setValueDropdown(value)
+        setShowModal(!showModal)
     }
 
     return (
@@ -124,17 +85,56 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }
                             <div data-cy="modal-add-priority-title">
                                 <Form.Label >Priority</Form.Label>
                             </div>
-                            <div data-cy="modal-add-priority-dropdown">
-                                <Select
-                                    ref={priority}
-                                    className="basic-single"
-                                    classNamePrefix="select"
-                                    defaultValue={edit === undefined ? colourOptions[0] : colourOptions[colourOptions.findIndex(x => x.value === edit.priority)]}
-                                    isSearchable={true}
-                                    name="color"
-                                    options={colourOptions}
-                                    styles={customStyles}
-                                />
+
+                            <div class="relative">
+                                <div onClick={() => { showDropdown() }} data-cy="modal-add-priority-dropdown" class="bg-white  flex flex-col p-2 border  border-gray-300 rounded-xl w-52">
+                                    <div class="flex py-2 px-2 items-center justify-between w-full">
+                                        {
+                                            valueDropdown === 'select' ? 'Pilih Priority' :
+                                                <div class="flex items-center">
+                                                    <div class={valueDropdown === 'very-high' ? "very-high h-2 w-2 rounded-full mr-2" : valueDropdown === 'high' ? "high h-2 w-2 rounded-full mr-2" : valueDropdown === 'normal' ? "medium h-2 w-2 rounded-full mr-2" : valueDropdown === 'low' ? "low h-2 w-2 rounded-full mr-2" : "very-low h-2 w-2 rounded-full mr-2"}>
+                                                    </div>{valueDropdown === 'very-high' ? "Very High" : valueDropdown === 'high' ? "High" : valueDropdown === 'normal' ? "Medium" : valueDropdown === 'low' ? "Low" : "Very Low"}</div>
+                                        }
+                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="#111111" stroke-linecap="square"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class={showModal ? 'absolute' : 'hidden'}  >
+                                <div onClick={() => { changeDropdown('very-high') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div class="flex py-2 px-2 items-center justify-between w-full">
+                                        <div class="flex items-center">
+                                            <div class="very-high h-2 w-2 rounded-full mr-2">
+                                            </div>Very High</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => { changeDropdown('high') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div class="flex py-2 px-2 items-center justify-between w-full">
+                                        <div class="flex items-center">
+                                            <div class="high h-2 w-2 rounded-full mr-2">
+                                            </div>High</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => { changeDropdown('normal') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div class="flex py-2 px-2 items-center justify-between w-full">
+                                        <div class="flex items-center">
+                                            <div class="medium h-2 w-2 rounded-full mr-2">
+                                            </div>Medium</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => { changeDropdown('low') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div class="flex py-2 px-2 items-center justify-between w-full">
+                                        <div class="flex items-center">
+                                            <div class="low h-2 w-2 rounded-full mr-2">
+                                            </div>Low</div>
+                                    </div>
+                                </div>
+                                <div onClick={() => { changeDropdown('very-low') }} data-cy="modal-add-priority-item" class="bg-white  flex flex-col p-2 shadow-xl cursor-pointer w-52 border-b border-b-gray-200">
+                                    <div class="flex py-2 px-2 items-center justify-between w-full">
+                                        <div class="flex items-center">
+                                            <div class="very-low h-2 w-2 rounded-full mr-2">
+                                            </div>Very Low</div>
+                                    </div>
+                                </div>
                             </div>
                         </Form.Group>
                     </Form>

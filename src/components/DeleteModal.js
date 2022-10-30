@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { Modal, Spinner } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { deleteData } from './../store/actions/activity';
-import { deleteDataTodo } from './../store/actions/todo';
+import Endpoint from "../services/Endpoint";
 
-const DeleteModal = ({ show, handleClose, item, type }) => {
-    const dispatch = useDispatch();
+const DeleteModal = ({ show, handleClose, item, type, deleteData }) => {
 
     const [process, setProcess] = useState(false);
     const [alert, setAlert] = useState(false);
@@ -18,14 +15,12 @@ const DeleteModal = ({ show, handleClose, item, type }) => {
         setProcess(true)
         switch (type) {
             case 'activity':
-                dispatch(deleteData(item)).then(() => {
-                    setProcess(false)
-                })
+                deleteData();
+                setProcess(false)
                 break;
             case 'todo':
-                dispatch(deleteDataTodo(item)).then(() => {
-                    setProcess(false)
-                })
+                deleteData()
+                setProcess(false)
                 break;
 
             default:

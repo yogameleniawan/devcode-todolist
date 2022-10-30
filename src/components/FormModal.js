@@ -1,16 +1,14 @@
 import { useRef, useState } from "react";
 import { Form, Modal, Spinner } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import Select from 'react-select';
-import { createTodo, updateDataTodo } from "../store/actions/todo";
+import Endpoint from "../services/Endpoint";
 
-const FormModal = ({ show, handleClose, type, activity_group_id, edit }) => {
+const FormModal = ({ show, handleClose, type, activity_group_id, edit, getData }) => {
 
     const priority = useRef();
     const titleInput = useRef();
     const [title, setTitle] = useState();
     const [isSubmit, setIsSubmit] = useState(false);
-    const dispatch = useDispatch();
 
     const colourOptions = [
         { value: 'very-high', label: 'Very High', color: '#ED4C5C' },
@@ -62,24 +60,38 @@ const FormModal = ({ show, handleClose, type, activity_group_id, edit }) => {
         }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setIsSubmit(true)
         switch (type) {
             case "add":
-                dispatch(createTodo({ activity_group_id: activity_group_id, title: titleInput.current.value })).then((data) => {
-                    dispatch(updateDataTodo({ title: titleInput.current.value, priority: priority.current.props.value.value, is_active: true, id: data.id })).then(() => {
-                        setIsSubmit(false)
-                        handleClose()
-                        setTitle("")
-                    })
+                const create = await Endpoint.createTodo({ activity_group_id: activity_group_id, title: titleInput.current.value });
+
+                const data = { title: titleInput.current.value, priority: priority.current.props.value.value, is_active: true, id: activity_group_id }
+
+                await Endpoint.updateTodo({
+                    data,
+                    id: create.data.id
                 });
+
+                setIsSubmit(false)
+                handleClose()
+                setTitle("")
+                getData()
                 break;
             case "edit":
-                dispatch(updateDataTodo({ title: titleInput.current.value, priority: priority.current.props.value.value, is_active: edit.is_active, id: edit.id })).then(() => {
-                    setIsSubmit(false)
-                    handleClose()
-                    setTitle("")
-                })
+                let payload = {
+                    title: titleInput.current.value,
+                    priority: priority.current.props.value.value,
+                    is_active: edit.is_active,
+                }
+                await Endpoint.updateTodo({
+                    data: payload,
+                    id: edit.id
+                });
+                setIsSubmit(false)
+                handleClose()
+                setTitle("")
+                getData()
                 break;
             default:
                 break;

@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useDispatch } from 'react-redux';
-import { filterData } from '../store/actions/todo';
 
-const DropdownFilter = () => {
+const DropdownFilter = ({ filterData }) => {
     const [type, setType] = useState();
-    const dispatch = useDispatch();
 
     const changeFilter = (type) => {
-        dispatch(filterData(type));
+        filterData(type);
         setType(type)
     }
 

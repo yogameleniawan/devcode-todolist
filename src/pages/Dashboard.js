@@ -1,19 +1,17 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DeleteModal from '../components/DeleteModal';
+import Endpoint from '../services/Endpoint';
 import image from './../assets/img/activity-empty-state.png';
-import { create, getActivities } from './../store/actions/activity';
 
 const Dashboard = () => {
-    const activity = useSelector(state => state.activity);
-    const dispatch = useDispatch();
 
     const [showDelete, setShowDelete] = useState(false);
     const [deleteItem, setDeleteItem] = useState([]);
     const [process, setProcess] = useState(false);
+    const [activities, setActivities] = useState([]);
 
     const handleCloseDelete = () => setShowDelete(false);
 
@@ -22,21 +20,40 @@ const Dashboard = () => {
         setDeleteItem(item)
     };
 
-    const createActivity = () => {
+    const createActivity = async () => {
         setProcess(true)
-        dispatch(create({ title: 'New Activity', email: 'yogameleniawan@gmail.com' })).then((data) => {
-            localStorage.setItem("activities", activity)
+
+        try {
+            const res = await Endpoint.createActivity({ title: 'New Activity', email: 'yogameleniawan@gmail.com' });
             setProcess(false)
-        }).catch(e => {
-            console.log(e);
-        });
+            getActivities()
+            return Promise.resolve(res.data);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    const getActivities = async () => {
+        try {
+            const res = await Endpoint.getAllActivity();
+            setActivities(res.data.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const deleteDate = async () => {
+        try {
+            await Endpoint.deleteActivity(deleteItem.id);
+            getActivities()
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     useEffect(() => {
-        if (activity.length === 0) {
-            dispatch(getActivities());
-        }
-    }, [activity, dispatch])
+        getActivities()
+    }, [])
 
     return (
         <div className="container flex flex-col">
@@ -47,11 +64,11 @@ const Dashboard = () => {
                 </div>
             </div>
             {
-                activity.length === 0 ? <div data-cy="activity-empty-state" className="flex justify-center">
+                activities.length === 0 ? <div data-cy="activity-empty-state" className="flex justify-center">
                     <img src={image} alt="Activity Empty State" loading="lazy" onClick={createActivity} className="hover: cursor-pointer" />
                 </div> : <div className="flex flex-wrap gap-5">
                     {
-                        activity.map((item, key) => (
+                        activities.map((item, key) => (
                             <div data-cy="activity-item" className="bg-white rounded-lg shadow-xl p-4 w-60 text-start" key={key}>
                                 <div data-cy="activity-item-title">
                                     <Link to={"/detail/" + item.id} state={{ item: item }} className="text-black">
@@ -69,7 +86,7 @@ const Dashboard = () => {
                     }
                 </div>
             }
-            <DeleteModal show={showDelete} item={deleteItem} type="activity" handleClose={handleCloseDelete}></DeleteModal>
+            <DeleteModal show={showDelete} item={deleteItem} type="activity" handleClose={handleCloseDelete} deleteData={deleteDate}></DeleteModal>
         </div>
     )
 }

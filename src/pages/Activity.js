@@ -1,20 +1,17 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import DeleteModal from "../components/DeleteModal";
 import DropdownFilter from "../components/Dropdown";
 import FormModal from "../components/FormModal";
-import { updateData } from "../store/actions/activity";
-import { getDetail, updateDataTodo } from "../store/actions/todo";
+import Endpoint from "../services/Endpoint";
 import image from './../assets/img/todo-empty-state.png';
 
 const Activity = () => {
-    const todo = useSelector(state => state.todos);
-    const dispatch = useDispatch();
     const location = useLocation();
     const titleInput = useRef(null);
 
+    const [todos, setTodos] = useState([]);
     const [show, setShow] = useState(false);
     const [type, setType] = useState(false);
     const [title, setTitle] = useState(location.state.item.title);
@@ -23,6 +20,103 @@ const Activity = () => {
     const [onLoad, setOnLoad] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [editTitle, setEditTitle] = useState(false);
+
+    const getDetail = async () => {
+        const res = await Endpoint.getAllTodo(location.state.item.id.toString());
+        setTodos(res.data.data);
+    }
+
+    const updateData = async () => {
+        try {
+            const data = {
+                title: titleInput.current.value,
+            }
+
+            const res = await Endpoint.updateActivity({ data: data, id: location.state.item.id.toString() });
+
+            return Promise.resolve(res.data);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    const deleteDataTodo = async () => {
+        try {
+            await Endpoint.deleteTodo(deleteItem.id);
+            getDetail()
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const updateDataTodo = async ({
+        title,
+        priority,
+        is_active,
+        id
+    }) => {
+        try {
+            const data = {
+                title: title,
+                priority: priority,
+                is_active: is_active
+            }
+
+            const res = await Endpoint.updateTodo({
+                data,
+                id: id
+            });
+            getDetail()
+            return Promise.resolve(res.data);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    const filterData = (type) => {
+        try {
+            switch (type) {
+                case 'sort-latest':
+                    const latest = todos.sort(function (a, b) {
+                        if (a.created_at === undefined || b.created_at === undefined) {
+                            return a.title.localeCompare(b.title);
+                        } else {
+                            return a.created_at.localeCompare(b.created_at);
+                        }
+                    });
+                    return [...latest];
+                case 'sort-oldest':
+                    const oldest = todos.sort(function (a, b) {
+                        if (a.created_at === undefined || b.created_at === undefined) {
+                            return b.title.localeCompare(a.title);
+                        } else {
+                            return b.created_at.localeCompare(a.created_at);
+                        }
+                    });
+                    return [...oldest];
+                case 'sort-az':
+                    const descending = todos.sort(function (a, b) {
+                        return b.title.localeCompare(a.title);
+                    });
+                    return [...descending];
+                case 'sort-za':
+                    const ascending = todos.sort(function (a, b) {
+                        return a.title.localeCompare(b.title);
+                    });
+                    return [...ascending];
+                case 'sort-unfinished':
+                    const unfinished = todos.sort(function (a, b) {
+                        return b.is_active.toString().localeCompare(a.is_active.toString());
+                    });
+                    return [...unfinished];
+
+                default:
+                    break;
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     const handleClose = () => setShow(false);
 
@@ -48,20 +142,17 @@ const Activity = () => {
 
     const handleInputBlur = event => {
         setEditTitle(!editTitle);
-
-        dispatch(updateData({ title: title, id: location.state.item.id.toString() }))
+        updateData();
     };
 
     const handleCheck = (item) => {
-        dispatch(updateDataTodo({ title: item.title, priority: item.priority, is_active: !item.is_active, id: item.id })).then(() => {
-        })
+        updateDataTodo({ title: item.title, priority: item.priority, is_active: !item.is_active, id: item.id })
     }
 
     useLayoutEffect(() => {
         setOnLoad(true)
-        dispatch(getDetail(location.state.item.id.toString())).then(() => {
-            setOnLoad(false)
-        });
+        getDetail()
+        setOnLoad(false)
     }, [])
 
     return (
@@ -81,21 +172,21 @@ const Activity = () => {
                         </div>
                     </div>
                     <div className="flex">
-                        <DropdownFilter></DropdownFilter>
+                        <DropdownFilter filterData={filterData}></DropdownFilter>
                         <div data-cy="todo-add-button">
                             <button onClick={() => handleShow('add')} className="font-bold text-lg main-color my-8 px-10 rounded-full text-white before:content-['+'] before:text-xl"> Tambah</button>
                         </div>
                     </div>
                 </div>
                 {
-                    todo.length === 0 ?
+                    todos.length === 0 ?
                         <div data-cy="todo-empty-state" className="flex justify-center hover:cursor-pointer" onClick={() => { handleShow('add') }}>
                             <img src={image} alt="Todo Empty State" loading="lazy" />
                         </div> :
                         <div className="flex flex-col gap-2 items-center">
                             {
                                 onLoad ? <Spinner animation="border" variant="primary" /> :
-                                    todo.map((item, key) => (
+                                    todos.map((item, key) => (
                                         <div key={key} data-cy="todo-item-1" className="bg-white rounded-lg shadow-xl p-5 w-full text-start flex justify-between">
                                             <div className="flex items-center">
                                                 <input onChange={() => { handleCheck(item) }} checked={!item.is_active} data-cy="todo-item-checkbox" type="checkbox" className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
@@ -116,8 +207,8 @@ const Activity = () => {
                         </div>
                 }
             </div>
-            <FormModal show={show} type={type} edit={editItem} activity_group_id={location.state.item.id} handleClose={handleClose} />
-            <DeleteModal show={showDelete} item={deleteItem} type="todo" handleClose={handleCloseDelete}></DeleteModal>
+            <FormModal show={show} type={type} edit={editItem} activity_group_id={location.state.item.id} handleClose={handleClose} getData={getDetail} />
+            <DeleteModal show={showDelete} item={deleteItem} type="todo" handleClose={handleCloseDelete} deleteData={deleteDataTodo}></DeleteModal>
         </>
     )
 }
